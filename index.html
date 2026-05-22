@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakti PM - AI Business Consultant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* --- Konfigurasi Dasar & Font --- */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #040309;
+            color: #E1E1E6;
+            transition: background-color 0.5s, color 0.5s;
+            overflow-x: hidden;
+        }
+
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .dark body {
+            background-color: #040309;
+            color: #E1E1E6;
+        }
+
+        html:not(.dark) body {
+            background-color: #F4F4F8;
+            color: #23212E;
+        }
+
+        /* --- Efek Aurora Borealis Background (Final - Warna Halus) --- */
+        .aurora-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .aurora {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(200px);
+            opacity: 0.5;
+            transform-origin: center center;
+
+            --c1: #583C87;
+            --c2: #1E7C5C;
+            --c3: #A91D72;
+            --c4: #583C87;
+
+            background: linear-gradient(45deg, var(--c1), var(--c2), var(--c3), var(--c4));
+            background-size: 400% 400%;
+
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+
+            transition: --c1 8s ease-in-out, --c2 8s ease-in-out, --c3 8s ease-in-out, --c4 8s ease-in-out;
+        }
+
+        .dark .aurora {
+            opacity: 0.5;
+            filter: blur(200px);
+        }
+
+        html:not(.dark) .aurora {
+            opacity: 0.6;
+            filter: blur(220px);
+        }
+
+        .aurora-1 {
+            width: 150vmax;
+            height: 150vmax;
+            top: -75%;
+            left: -75%;
+            animation-name: aurora-flow-1, aurora-color-shift;
+            animation-duration: 20s, 15s;
+        }
+
+        .aurora-2 {
+            width: 120vmax;
+            height: 120vmax;
+            top: -20%;
+            right: -60%;
+            animation-name: aurora-flow-2, aurora-color-shift;
+            animation-duration: 25s, 18s;
+            animation-delay: 0s, 2s;
+        }
+
+        .aurora-3 {
+            width: 180vmax;
+            height: 180vmax;
+            bottom: -80%;
+            left: -30%;
+            animation-name: aurora-flow-3, aurora-color-shift;
+            animation-duration: 22s, 20s;
+            animation-delay: 0s, 4s;
+        }
+
+        @keyframes aurora-flow-1 {
+            0% {
+                transform: translate(0, 0) rotate(-25deg) skewX(30deg) scale(1);
+            }
+
+            50% {
+                transform: translate(15vw, 10vh) rotate(20deg) skewX(-35deg) scale(1.3);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(-25deg) skewX(30deg) scale(1);
+            }
+        }
+
+        @keyframes aurora-flow-2 {
+            0% {
+                transform: translate(0, 0) rotate(30deg) skewX(-35deg) scale(1.2);
+            }
+
+            50% {
+                transform: translate(-18vw, 8vh) rotate(-15deg) skewX(25deg) scale(1);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(30deg) skewX(-35deg) scale(1.2);
+            }
+        }
+
+        @keyframes aurora-flow-3 {
+            0% {
+                transform: translate(0, 0) rotate(15deg) skewX(40deg) scale(1.1);
+            }
+
+            50% {
+                transform: translate(10vw, -12vh) rotate(-25deg) skewX(-30deg) scale(1.4);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(15deg) skewX(40deg) scale(1.1);
+            }
+        }
+
+        @keyframes aurora-color-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* --- Efek Sparkle (Kilauan) --- */
+        .sparkle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: sparkle-anim 5s infinite;
+            opacity: 0;
+        }
+
+        @keyframes sparkle-anim {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* --- Efek Glassmorphism --- */
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s, border 0.3s;
+        }
+
+        html:not(.dark) .glassmorphism {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .glassmorphism:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        html:not(.dark) .glassmorphism:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        /* --- Efek Shiny Gradient Border --- */
+        .shiny-border {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shiny-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            margin: -2px;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #7F5AF0, #F925A4, #2CB67D, #7F5AF0);
+            background-size: 400% 400%;
+            animation: gradient-spin 5s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .shiny-border:hover::before,
+        .shiny-border.active::before {
+            opacity: 1;
+        }
+
+        @keyframes gradient-spin {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        html:not(.dark) ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Animasi Section --- */
+        .portfolio-item,
+        .social-card,
+        .philosophy-content,
+        .credentials-widget,
+        .blog-card {
+            will-change: transform, opacity;
+        }
+
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Styling Widget Kredensial --- */
+        .credential-tab {
+            transition: all 0.3s ease;
+        }
+
+        .credential-tab.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        html:not(.dark) .credential-tab.active {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: #23212E;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+
+    <!-- Container untuk efek visual -->
+    <div class="aurora-background">
+        <div class="aurora aurora-1"></div>
+        <div class="aurora aurora-2"></div>
+        <div class="aurora aurora-3"></div>
+    </div>
+    <div id="sparkle-container" class="sparkle-container"></div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 p-4 md:p-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="font-poppins font-bold text-xl tracking-wider">Bakti PM</div>
+            <nav class="flex items-center space-x-3 md:space-x-4 glassmorphism rounded-full p-2">
+                <div class="relative">
+                    <button id="lang-btn" class="p-2 rounded-full hover:bg-white/10 transition-colors"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286H4.545zm1.634-.736L5.5 4.426h-.052L4.81 5.978h1.369zm3.893 1.286h-.84l-1.9-5h1.284l1.316 3.736h.052l1.316-3.736h1.284l-1.9 5z" />
+                            <path
+                                d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm7.138 9.995c.193.301.402.583.63.846-.748.575-1.673 1.001-2.768 1.142V14h-1v-1.216A4.553 4.553 0 0 1 1 10.082V9h1.252a5.001 5.001 0 0 0 1.922 2.162c.24-.287.458-.614.635-.979l-1.85-3.417a5.996 5.996 0 0 0-.18-1.015H3V4.012h3.222c.123-.254.254-.5.393-.742H1.85V2h4.542c.167.324.324.658.468.995H11.5v1.25h-2.179a4.553 4.553 0 0 1-.555.867L8.71 8.252l1.85 3.417c.166.303.31.615.435.936.387-.16.754-.355 1.088-.566l.353.884c-.35.21-.715.4-1.1.557.085.16.165.325.238.498A5.001 5.001 0 0 0 15 11.918V10h-1.252a5.001 5.001 0 0 0-1.922-2.162c-.24.287-.458-.614-.635-.979l1.85-3.417a5.996 5.996 0 0 0 .18-1.015H13V4.012h-3.222c-.123-.254-.254-.5-.393-.742H14.15V2h-4.542c-.167.324-.324.658-.468.995H5.5v1.25h2.179c.105.22.202.448.29.683l1.849 3.417-1.85 3.417z" />
+                        </svg></button>
+                    <div id="lang-menu"
+                        class="hidden absolute right-0 mt-2 w-32 glassmorphism rounded-lg shadow-lg py-1">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-white/10" data-lang="en">English</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-white/10" data-lang="id">Indonesia</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-white/10" data-lang="zh">简体中文</a>
+                    </div>
+                </div>
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-white/10 transition-colors"><svg
+                        id="theme-toggle-dark-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                    </svg><svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor"
+                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                            fill-rule="evenodd" clip-rule="evenodd"></path>
+                    </svg></button>
+                <a href="#contact" id="contact-btn"
+                    class="text-sm font-semibold px-4 py-2 rounded-full bg-indigo-500/50 dark:bg-indigo-500/80 hover:bg-indigo-500 transition-colors">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4">
+        <!-- Section 1: AI Oracle -->
+        <section id="oracle" class="min-h-screen flex flex-col justify-center items-center"
+            data-aurora-palette="oracle">
+            <div class="w-full grid grid-cols-1 lg:grid-cols-5 gap-y-16 lg:gap-8 items-center">
+                <div class="lg:col-span-3 text-center lg:text-left flex flex-col justify-center">
+                    <div>
+                        <h1 id="oracle-title"
+                            class="font-poppins text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold max-w-4xl leading-tight">
+                            Ask, and you shall see.</h1>
+                        <p id="oracle-subtitle"
+                            class="mt-5 text-lg md:text-xl max-w-2xl mx-auto lg:mx-0 text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">
+                            Navigate my world with your voice or text. What are you looking for?</p>
+                        <div class="mt-8 w-full max-w-xl mx-auto lg:mx-0">
+                            <div class="relative shiny-border rounded-full">
+                                <input type="text" id="ai-search" placeholder="e.g., show me your best projects"
+                                    class="w-full pl-6 pr-16 py-4 bg-transparent glassmorphism rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-400/50 transition-all">
+                                <button id="voice-btn"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-white/20 transition-colors"><svg
+                                        class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 016 0v8.25a3 3 0 01-3 3z" />
+                                    </svg></button>
+                            </div>
+                            <div id="voice-status"
+                                class="mt-3 text-sm text-white/60 dark:text-white/60 html:not(.dark):text-gray-500 h-5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 flex flex-col items-center justify-center order-first lg:order-last">
+                    <div class="relative w-60 h-60 sm:w-72 sm:h-72 md:w-80 md:h-80 shiny-border rounded-full p-2">
+                        <div class="glassmorphism rounded-full w-full h-full p-2">
+                            <img src="https://placehold.co/400x400/0D0B14/7F5AF0?text=Bakti PM"
+                                onerror="this.onerror=null;this.src='https://placehold.co/400x400/cccccc/333333?text=Image+Not+Found';"
+                                alt="Portrait of Alex" class="rounded-full w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="mt-5 text-center">
+                        <h2 id="full-name" class="font-poppins text-3xl font-bold">Bakti Parningotan Marbun</h2>
+                        <p id="profession"
+                            class="text-lg text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">AI Business
+                            Consultant</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Filosofi -->
+        <section id="philosophy" class="py-24 md:py-32 lg:py-40" data-aurora-palette="philosophy">
+            <div class="philosophy-content fade-in-element text-center max-w-3xl mx-auto">
+                <h2 id="philosophy-title" class="font-poppins text-3xl md:text-4xl font-bold">My Philosophy</h2>
+                <p id="philosophy-subtitle"
+                    class="mt-4 text-lg text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">Beyond Pixels,
+                    Building Experiences.</p>
+                <div
+                    class="mt-8 space-y-5 text-base md:text-lg leading-relaxed text-white/80 dark:text-white/80 html:not(.dark):text-gray-700">
+                    <p id="philosophy-p1">I believe successful digital products are born from a perfect blend of
+                        functionality, aesthetics, and a deep understanding of human behavior. My AI design process is a
+                        fusion of technical skills and cognitive psychology.</p>
+                    <p id="philosophy-p2">I don't just solve problems; I create meaningful, and memorable experiences. I
+                        am a staunch advocate for your AI business quality, ensuring every module has a purpose.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Kredensial -->
+        <section id="credentials" class="py-24 md:py-32 lg:py-40" data-aurora-palette="credentials">
+            <div class="credentials-widget fade-in-element max-w-4xl mx-auto">
+                <h2 id="credentials-title" class="font-poppins text-3xl md:text-4xl font-bold text-center">My Journey
+                </h2>
+                <p id="credentials-subtitle"
+                    class="mt-4 text-center text-lg text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">A
+                    timeline of my professional growth.</p>
+
+                <div class="mt-12">
+                    <div
+                        class="glassmorphism rounded-xl p-2 flex justify-center items-center space-x-2 max-w-sm mx-auto">
+                        <button data-tab="experience"
+                            class="credential-tab w-full font-semibold py-2 px-4 rounded-lg active"
+                            id="tab-experience">Experience</button>
+                        <button data-tab="education" class="credential-tab w-full font-semibold py-2 px-4 rounded-lg"
+                            id="tab-education">Education</button>
+                        <button data-tab="certifications"
+                            class="credential-tab w-full font-semibold py-2 px-4 rounded-lg"
+                            id="tab-certifications">Certifications</button>
+                    </div>
+                    <div id="credentials-content" class="mt-8">
+                        <!-- Konten akan di-render oleh JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Portfolio -->
+        <section id="portfolio" class="py-24 md:py-32 lg:py-40" data-aurora-palette="portfolio">
+            <h2 id="portfolio-title" class="font-poppins text-3xl md:text-4xl font-bold text-center">Selected Works</h2>
+            <p id="portfolio-subtitle"
+                class="mt-4 text-center text-lg text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">A
+                glimpse into my creative universe.</p>
+            <div id="portfolio-grid" class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"></div>
+        </section>
+
+        <!-- Section Testimonials -->
+        <section id="testimonials" class="py-24 md:py-32 lg:py-40" data-aurora-palette="testimonials">
+            <h2 id="testimonials-title" class="font-poppins text-3xl md:text-4xl font-bold text-center">Client
+                Testimonials</h2>
+            <p id="testimonials-subtitle"
+                class="mt-4 text-center text-lg text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">What
+                people say about working with me.</p>
+            <div id="testimonials-grid" class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <!-- Section Blog -->
+        <section id="blog" class="py-24 md:py-32 lg:py-40" data-aurora-palette="blog">
+            <h2 id="blog-title" class="font-poppins text-3xl md:text-4xl font-bold text-center">Latest Articles</h2>
+            <p id="blog-subtitle"
+                class="mt-4 text-center text-lg text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">Sharing
+                insights and stories from my journey.</p>
+            <div id="blog-grid" class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <!-- Section Digital Presence -->
+        <section id="presence" class="py-24 md:py-32 lg:py-40" data-aurora-palette="presence">
+            <h2 id="presence-title" class="font-poppins text-3xl md:text-4xl font-bold text-center">Digital Presence
+            </h2>
+            <p id="presence-subtitle"
+                class="mt-4 text-center text-lg text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">Live
+                feeds from my creative corners.</p>
+            <div id="social-grid" class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <!-- Section Contact -->
+        <section id="contact" class="py-24 md:py-32 lg:py-40 text-center" data-aurora-palette="contact">
+            <h2 id="contact-title" class="font-poppins text-3xl md:text-4xl font-bold">Get In Touch</h2>
+            <p id="contact-subtitle"
+                class="mt-4 text-center text-lg text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">Have a
+                project in mind or just want to say hello?</p>
+            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-5">
+                <a href="mailto:hello@alex.design" id="contact-email-btn"
+                    class="inline-block font-poppins font-semibold text-lg px-8 py-4 rounded-full shiny-border glassmorphism transition-transform hover:scale-105">
+                    hello@alex.design
+                </a>
+                <a href="https://wa.me/6281234567890" target="_blank" id="contact-whatsapp-btn"
+                    class="inline-flex items-center gap-3 font-poppins font-semibold text-lg px-8 py-4 rounded-full shiny-border glassmorphism transition-transform hover:scale-105">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
+                    </svg>
+                    <span id="whatsapp-text">Chat on WhatsApp</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-12 px-4">
+        <p id="footer-text" class="text-sm text-white/50 dark:text-white/50 html:not(.dark):text-gray-500">Designed &
+            Built by Alex with 💜</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA & CONFIG ---
+            const translations = {
+                en: { "contact-btn": "Contact", "oracle-title": "Ask, and you shall see.", "oracle-subtitle": "Navigate my world with your voice or text. What are you looking for?", "ai-search-placeholder": "e.g., show me your best projects", "full-name": "Alex Gemini", "profession": "UI/UX & Experience Designer", "philosophy-title": "My Philosophy", "philosophy-subtitle": "Beyond Pixels, Building Experiences.", "philosophy-p1": "I believe successful digital products are born from a perfect blend of functionality, aesthetics, and a deep understanding of human behavior. My design process is a fusion of graphic design, fine arts, and cognitive psychology.", "philosophy-p2": "I don't just solve problems; I create beautiful, meaningful, and memorable experiences. I am a staunch advocate for visual quality and the user's emotional journey, ensuring every pixel has a purpose.", "credentials-title": "My Journey", "credentials-subtitle": "A timeline of my professional growth.", "tab-experience": "Experience", "tab-education": "Education", "tab-certifications": "Certifications", "portfolio-title": "Selected Works", "portfolio-subtitle": "A glimpse into my creative universe.", "testimonials-title": "Client Testimonials", "testimonials-subtitle": "What people say about working with me.", "blog-title": "Latest Articles", "blog-subtitle": "Sharing insights and stories from my journey.", "presence-title": "Digital Presence", "presence-subtitle": "Live feeds from my creative corners.", "contact-title": "Get In Touch", "contact-subtitle": "Have a project in mind or just want to say hello?", "contact-email-btn": "hello@alex.design", "whatsapp-text": "Chat on WhatsApp", "footer-text": "Designed & Built by Alex with 💜" },
+                id: { "contact-btn": "Kontak", "oracle-title": "Tanya, dan kau 'kan melihat.", "oracle-subtitle": "Jelajahi duniaku dengan suara atau teks. Apa yang Anda cari?", "ai-search-placeholder": "cth: tunjukkan proyek terbaikmu", "full-name": "Alex Gemini", "profession": "Desainer UI/UX & Pengalaman", "philosophy-title": "Filosofi Saya", "philosophy-subtitle": "Melampaui Piksel, Membangun Pengalaman.", "philosophy-p1": "Saya percaya produk digital yang sukses lahir dari perpaduan sempurna antara fungsionalitas, estetika, dan pemahaman mendalam tentang perilaku manusia. Proses desain saya adalah perpaduan dari desain grafis, seni rupa, dan psikologi kognitif.", "philosophy-p2": "Saya tidak hanya memecahkan masalah; saya menciptakan pengalaman yang indah, bermakna, dan tak terlupakan. Saya adalah advokat setia untuk kualitas visual dan perjalanan emosional pengguna, memastikan setiap piksel memiliki tujuan.", "credentials-title": "Perjalanan Saya", "credentials-subtitle": "Linimasa pertumbuhan profesional saya.", "tab-experience": "Pengalaman", "tab-education": "Pendidikan", "tab-certifications": "Sertifikasi", "portfolio-title": "Karya Pilihan", "portfolio-subtitle": "Sekilas tentang dunia kreatif saya.", "testimonials-title": "Testimoni Klien", "testimonials-subtitle": "Apa kata mereka tentang bekerja dengan saya.", "blog-title": "Artikel Terbaru", "blog-subtitle": "Berbagi wawasan dan cerita dari perjalanan saya.", "presence-title": "Jejak Digital", "presence-subtitle": "Kabar langsung dari sudut kreatif saya.", "contact-title": "Hubungi Saya", "contact-subtitle": "Punya proyek atau hanya ingin menyapa?", "contact-email-btn": "halo@alex.design", "whatsapp-text": "Chat di WhatsApp", "footer-text": "Didesain & Dibuat oleh Alex dengan 💜" },
+                zh: { "contact-btn": "联系", "oracle-title": "有问，必应。", "oracle-subtitle": "用您的声音或文字来导航我的世界。您在寻找什么？", "ai-search-placeholder": "例如：展示你最好的项目", "full-name": "亚历克斯·双子", "profession": "UI/UX 与体验设计师", "philosophy-title": "我的哲学", "philosophy-subtitle": "超越像素，构建体验。", "philosophy-p1": "我相信成功的数字产品源于功能、美学和对人类行为深刻理解的完美结合。我的设计过程融合了平面设计、美术和认知心理学。", "philosophy-p2": "我不仅仅解决问题；我创造美丽、有意义和难忘的体验。我坚定地倡导视觉质量和用户的情感旅程，确保每个像素都有其目的。", "credentials-title": "我的旅程", "credentials-subtitle": "我的专业成长时间线。", "tab-experience": "经验", "tab-education": "教育", "tab-certifications": "认证", "portfolio-title": "精选作品", "portfolio-subtitle": "一窥我的创意世界。", "testimonials-title": "客户评价", "testimonials-subtitle": "人们对我工作的评价。", "blog-title": "最新文章", "blog-subtitle": "分享我旅途中的见解和故事。", "presence-title": "数字足迹", "presence-subtitle": "来自我创意角落的实时动态。", "contact-title": "保持联系", "contact-subtitle": "有项目想合作或只是想打个招呼？", "contact-email-btn": "hello@alex.design", "whatsapp-text": "在WhatsApp上聊天", "footer-text": "由 Alex 设计与制作 💜" }
+            };
+            const mockCredentialsData = {
+                experience: [
+                    { title: "AI Automation Engineer", subtitle: "NusantaLab Inc.", date: "2025 - Present", description: "Leading the design of flagship products, mentoring junior designers, and establishing a new design system based on generative principles." },
+                    { title: "Product Designer", subtitle: "QuantumLeap Corp.", date: "2017 - 2020", description: "Designed and launched three major mobile applications, focusing on user research and data-driven design decisions." }
+                ],
+                education: [
+                    { title: "Bachelor of Informatics", subtitle: "Universitas Bhinneka Nusantara", date: "2025", description: "Thesis on 'Design of Personal Legal Chatbot based on Web and Generative AI'." },
+                ],
+                certifications: [
+                    { title: "Certified Artificial Intelligence Engineer (CAIE)", subtitle: "United States Artificial Intelligence Institute (USAII)", date: "2025", description: "Demonstrated foundational-to-practical AI engineering knowledge for industry work in AI" },
+                    { title: "ACA SysOps Engineer Associate", subtitle: "Alibaba Cloud", date: "2025", description: "This certification validates the skills and knowledge required to deploy, operate, and manage applications on Alibaba Cloud, covering topics such as compute, storage, networking, databases, and security." }
+                ]
+            };
+            const mockPortfolioData = [
+                { title: "OmniChannel Support AI", description: "Deployed a comprehensive AI automation pipeline across 5 social channels, reducing response times by 80% and scaling engagement.", image: "https://placehold.co/600x400/7F5AF0/FFFFFF?text=OmniAI", tags: ["AI Automation", "Pipeline", "Social Media"], link: "#" },
+                { title: "Creator Growth Engine", description: "Built an intelligent content recommendation and scheduling system for YouTube networks using generative models.", image: "https://placehold.co/600x400/F925A4/FFFFFF?text=Creator+Engine", tags: ["Generative AI", "Strategy", "YouTube"], link: "#" },
+            ];
+            const mockTestimonialsData = [
+                { quote: "Bakti is an absolute visionary. The AI automation pipelines he architected for our channels transformed our operational efficiency completely.", author: "Sarah Jenkins", role: "Director at Media Innovations", image: "https://placehold.co/100x100/1E7C5C/FFFFFF?text=SJ" },
+                { quote: "Working with Bakti was a game-changer. The new AI-driven content strategy didn't just look good on paper; it improved our workflow tenfold.", author: "Marcus Tran", role: "Operations Lead at CreatorHub", image: "https://placehold.co/100x100/583C87/FFFFFF?text=MT" },
+                { quote: "Rarely do you find a consultant who balances technical brilliance with rock-solid business logic. We saw a 40% increase in audience growth.", author: "Elena Rostova", role: "Founder of Digital AI", image: "https://placehold.co/100x100/B57DA0/FFFFFF?text=ER" }
+            ];
+            const mockBlogData = [
+                { title: "Maximizing ROI with AI Workflows", category: "Business Automation", excerpt: "Discover how implementing tailored AI pipelines can reduce operational overhead and scale your digital presence efficiently...", image: "https://placehold.co/600x400/1E7C5C/FFFFFF?text=Blog+1", link: "#" },
+                { title: "The Future of Content Creation", category: "AI Strategy", excerpt: "Beyond simple text generation, how can we leverage AI to build comprehensive content ecosystems that drive engagement? A deep dive...", image: "https://placehold.co/600x400/B57DA0/FFFFFF?text=Blog+2", link: "#" },
+                { title: "Demystifying AI for Executives", category: "Leadership Insights", excerpt: "A practical guide to understanding AI capabilities and identifying high-impact automation opportunities within your organization...", image: "https://placehold.co/600x400/2A30A3/FFFFFF?text=Blog+3", link: "#" }
+            ];
+            const mockSocialData = [
+                { platform: 'GitHub', user: '@vioniztd', action: 'Pushed a commit to', repo: 'interactive-portfolio', content: 'feat: Added blog section.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>' },
+                { platform: 'Instagram', user: '@baktipm.virtualassistant', action: 'Posted a thread', repo: 'On AI Philosophy', content: 'True design isn\'t just about making things pretty. It\'s about understanding human cognition and creating experiences that feel effortless and intuitive. Every pixel must have a purpose.', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/></svg>' }
+            ];
+
+            // --- AURORA TRANSITION LOGIC ---
+            const auroraPalettes = {
+                oracle: ['#583C87', '#1E7C5C', '#A91D72'],
+                philosophy: ['#3a2e8d', '#583C87', '#2A30A3'],
+                credentials: ['#1E7C5C', '#2A30A3', '#3a2e8d'],
+                portfolio: ['#2A30A3', '#18A6A8', '#583C87'],
+                testimonials: ['#18A6A8', '#583C87', '#B57DA0'],
+                blog: ['#18A6A8', '#B57DA0', '#583C87'],
+                presence: ['#B57DA0', '#C4742F', '#A91D72'],
+                contact: ['#A91D72', '#D46233', '#583C87']
+            };
+            const auroraDivs = document.querySelectorAll('.aurora');
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const paletteName = entry.target.dataset.auroraPalette;
+                        const newPalette = auroraPalettes[paletteName];
+                        if (newPalette) {
+                            auroraDivs.forEach((div, index) => {
+                                const colorIndex = index % newPalette.length;
+                                div.style.setProperty(`--c1`, newPalette[colorIndex]);
+                                div.style.setProperty(`--c2`, newPalette[(colorIndex + 1) % newPalette.length]);
+                                div.style.setProperty(`--c3`, newPalette[(colorIndex + 2) % newPalette.length]);
+                                div.style.setProperty(`--c4`, newPalette[colorIndex]);
+                            });
+                        }
+                    }
+                });
+            }, { threshold: 0.2 });
+            document.querySelectorAll('[data-aurora-palette]').forEach(section => {
+                sectionObserver.observe(section);
+            });
+
+            // --- FADE-IN ANIMATION ON SCROLL ---
+            const fadeInObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        fadeInObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // --- THEME TOGGLE ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const applyTheme = () => { if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('theme-toggle-dark-icon').classList.remove('hidden'); document.getElementById('theme-toggle-light-icon').classList.add('hidden'); } else { document.documentElement.classList.remove('dark'); document.getElementById('theme-toggle-dark-icon').classList.add('hidden'); document.getElementById('theme-toggle-light-icon').classList.remove('hidden'); } };
+            themeToggle.addEventListener('click', () => { if (localStorage.getItem('theme') === 'dark') { localStorage.setItem('theme', 'light'); } else { localStorage.setItem('theme', 'dark'); } applyTheme(); });
+
+            // --- LANGUAGE SWITCHER ---
+            const langBtn = document.getElementById('lang-btn');
+            const langMenu = document.getElementById('lang-menu');
+            const applyLanguage = (lang) => { const langData = translations[lang]; document.querySelectorAll('[id]').forEach(el => { if (langData[el.id]) { if (el.tagName === 'INPUT') { el.placeholder = langData[el.id]; } else { el.innerText = langData[el.id]; } } }); localStorage.setItem('language', lang); langMenu.classList.add('hidden'); };
+            langBtn.addEventListener('click', (e) => { e.stopPropagation(); langMenu.classList.toggle('hidden'); });
+            document.addEventListener('click', () => langMenu.classList.add('hidden'));
+            langMenu.addEventListener('click', (e) => { e.stopPropagation(); if (e.target.tagName === 'A') { const lang = e.target.dataset.lang; applyLanguage(lang); } });
+
+            // --- VOICE RECOGNITION ---
+            const voiceBtn = document.getElementById('voice-btn');
+            const voiceStatus = document.getElementById('voice-status');
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                const recognition = new SpeechRecognition();
+                recognition.continuous = false; recognition.lang = 'en-US'; recognition.interimResults = false; recognition.maxAlternatives = 1;
+                voiceBtn.addEventListener('click', () => { recognition.start(); voiceStatus.textContent = 'Listening...'; document.querySelector('#ai-search').parentElement.classList.add('active'); });
+                recognition.onresult = (event) => { const speechResult = event.results[0][0].transcript; document.getElementById('ai-search').value = speechResult; voiceStatus.textContent = `I heard: "${speechResult}"`; setTimeout(() => voiceStatus.textContent = '', 3000); };
+                recognition.onspeechend = () => { recognition.stop(); voiceStatus.textContent = 'Processing...'; document.querySelector('#ai-search').parentElement.classList.remove('active'); };
+                recognition.onerror = (event) => { voiceStatus.textContent = 'Error occurred in recognition: ' + event.error; document.querySelector('#ai-search').parentElement.classList.remove('active'); };
+            } else { voiceBtn.style.display = 'none'; voiceStatus.textContent = 'Sorry, your browser does not support voice recognition.'; }
+
+            // --- SPARKLE EFFECT ---
+            const sparkleContainerEl = document.getElementById('sparkle-container');
+            for (let i = 0; i < 50; i++) { const sparkle = document.createElement('div'); sparkle.className = 'sparkle'; sparkle.style.top = `${Math.random() * 100}%`; sparkle.style.left = `${Math.random() * 100}%`; sparkle.style.animationDelay = `${Math.random() * 5}s`; sparkle.style.animationDuration = `${2 + Math.random() * 3}s`; sparkleContainerEl.appendChild(sparkle); }
+
+            // --- CREDENTIALS WIDGET LOGIC ---
+            const credentialsContent = document.getElementById('credentials-content');
+            const credentialTabs = document.querySelectorAll('.credential-tab');
+            const renderCredentials = (category) => {
+                credentialsContent.innerHTML = '';
+                const items = mockCredentialsData[category];
+                if (items) {
+                    const list = document.createElement('div');
+                    list.className = 'space-y-8';
+                    items.forEach(item => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'pl-8 relative border-l-2 border-white/10';
+                        itemEl.innerHTML = `
+                        <div class="absolute w-4 h-4 bg-indigo-400 rounded-full -left-2.5 border-4 border-[#040309]"></div>
+                        <p class="text-sm text-white/60 dark:text-white/60 html:not(.dark):text-gray-500">${item.date}</p>
+                        <h3 class="font-poppins text-xl font-bold mt-1">${item.title}</h3>
+                        <p class="text-indigo-300">${item.subtitle}</p>
+                        <p class="mt-2 text-white/80 dark:text-white/80 html:not(.dark):text-gray-700">${item.description}</p>
+                    `;
+                        list.appendChild(itemEl);
+                    });
+                    credentialsContent.appendChild(list);
+                }
+            };
+            credentialTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    credentialTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    renderCredentials(tab.dataset.tab);
+                });
+            });
+
+            // --- LOAD PORTFOLIO DATA ---
+            const portfolioGrid = document.getElementById('portfolio-grid');
+            const loadPortfolioData = () => {
+                portfolioGrid.innerHTML = '';
+                mockPortfolioData.forEach((item, index) => {
+                    const tagElements = item.tags.map(tag => `<span class="text-xs font-medium px-3 py-1 rounded-full bg-white/10 dark:bg-white/10 html:not(.dark):bg-black/10">${tag}</span>`).join('');
+                    const card = `<div class="portfolio-item fade-in-element" style="transition-delay: ${index * 100}ms"><div class="glassmorphism rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10"><div class="overflow-hidden"><img src="${item.image}" alt="${item.title}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"></div><div class="p-6"><div class="flex flex-wrap gap-2 mb-4">${tagElements}</div><h3 class="font-poppins text-2xl font-bold">${item.title}</h3><p class="mt-2 text-white/70 dark:text-white/70 html:not(.dark):text-gray-600">${item.description}</p><a href="${item.link}" target="_blank" class="inline-block mt-6 font-semibold shiny-border rounded-full px-5 py-2.5 text-sm"><span class="relative z-10">View Project &rarr;</span></a></div></div></div>`;
+                    portfolioGrid.innerHTML += card;
+                });
+                document.querySelectorAll('.portfolio-item').forEach(el => fadeInObserver.observe(el));
+            };
+
+            // --- LOAD TESTIMONIALS DATA ---
+            const testimonialsGrid = document.getElementById('testimonials-grid');
+            const loadTestimonialsData = () => {
+                testimonialsGrid.innerHTML = '';
+                mockTestimonialsData.forEach((item, index) => {
+                    const card = `<div class="glassmorphism rounded-2xl p-8 flex flex-col justify-between shiny-border transform hover:-translate-y-2 transition-transform duration-300 fade-in-element" style="transition-delay: ${index * 100}ms">
+                        <div class="mb-6 text-indigo-300">
+                            <svg class="w-8 h-8 opacity-50" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                        </div>
+                        <p class="text-white/90 dark:text-white/90 html:not(.dark):text-gray-800 text-lg leading-relaxed italic mb-8">"${item.quote}"</p>
+                        <div class="flex items-center">
+                            <img src="${item.image}" alt="${item.author}" class="w-12 h-12 rounded-full object-cover mr-4">
+                            <div>
+                                <h4 class="font-poppins font-bold text-sm">${item.author}</h4>
+                                <p class="text-xs text-white/60 dark:text-white/60 html:not(.dark):text-gray-500">${item.role}</p>
+                            </div>
+                        </div>
+                    </div>`;
+                    testimonialsGrid.innerHTML += card;
+                });
+                document.querySelectorAll('#testimonials-grid .fade-in-element').forEach(el => fadeInObserver.observe(el));
+            };
+
+            // --- LOAD BLOG DATA ---
+            const blogGrid = document.getElementById('blog-grid');
+            const loadBlogData = () => {
+                blogGrid.innerHTML = '';
+                mockBlogData.forEach((item, index) => {
+                    const card = `<div class="blog-card glassmorphism rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 fade-in-element" style="transition-delay: ${index * 100}ms">
+                    <div class="overflow-hidden"><img src="${item.image}" alt="${item.title}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"></div>
+                    <div class="p-6">
+                        <p class="text-sm font-semibold text-indigo-300">${item.category}</p>
+                        <h3 class="font-poppins text-xl font-bold mt-2">${item.title}</h3>
+                        <p class="mt-2 text-white/70 dark:text-white/70 html:not(.dark):text-gray-600 text-sm">${item.excerpt}</p>
+                        <a href="${item.link}" target="_blank" class="inline-block mt-5 font-semibold text-sm text-indigo-300 hover:text-indigo-200">Read More &rarr;</a>
+                    </div>
+                </div>`;
+                    blogGrid.innerHTML += card;
+                });
+                document.querySelectorAll('.blog-card').forEach(el => fadeInObserver.observe(el));
+            };
+
+            // --- LOAD SOCIAL DATA ---
+            const socialGrid = document.getElementById('social-grid');
+            const loadSocialData = () => {
+                socialGrid.innerHTML = '';
+                mockSocialData.forEach((item, index) => {
+                    const card = `<div class="social-card glassmorphism rounded-2xl p-6 flex flex-col shiny-border transform hover:-translate-y-2 transition-transform duration-300 fade-in-element" style="transition-delay: ${index * 100}ms"><div class="flex items-center mb-4"><div class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 mr-4">${item.icon}</div><div><p class="font-semibold">${item.platform}</p><p class="text-sm text-white/60 dark:text-white/60 html:not(.dark):text-gray-500">${item.user}</p></div></div><p class="text-white/80 dark:text-white/80 html:not(.dark):text-gray-700 flex-grow"><span class="text-white/60 dark:text-white/60 html:not(.dark):text-gray-500">${item.action} <strong>${item.repo}</strong>:</span> ${item.content}</p></div>`;
+                    socialGrid.innerHTML += card;
+                });
+                document.querySelectorAll('.social-card').forEach(el => fadeInObserver.observe(el));
+            };
+
+            // --- INITIALIZATION ---
+            applyTheme();
+            const savedLang = localStorage.getItem('language') || 'en';
+            applyLanguage(savedLang);
+            renderCredentials('experience');
+            loadPortfolioData();
+            loadTestimonialsData();
+            loadBlogData();
+            loadSocialData();
+            document.querySelectorAll('.fade-in-element').forEach(el => fadeInObserver.observe(el));
+        });
+    </script>
+</body>
+
+</html>
